@@ -1,3 +1,5 @@
+Ejecutar npm install cada que copien la repo para configurar entorno desarrollo con todo
+
 Los principales cambios fue la actualizacion de dependecias para ejecutar el servidor
 Cambie las funcones async function por arrow functions y manejar una mejor nomenclatura
 Un estilo mas empresarial (css)
