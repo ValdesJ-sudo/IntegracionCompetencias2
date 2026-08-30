@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Registro</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/formularios.css">
+</head>
+<body>
+
+    <a href="admin.html" id="btn-enlace-admin" class="btn-flotante" style="display: none;">Admin</a>
+    <a href="login.html" class="btn-flotante btn-cerrar-sesion">Cerrar Sesión</a>
+
+    <main class="contenedor-principal">
+        <div class="encabezado">
+            <h1>Control de Asistencia</h1>
+            <div id="reloj" class="reloj">00:00:00</div>
+            <hr>
+        </div>
+
+        <div class="panel-botones">
+            <button id="btn-marcar" class="btn" data-accion="entrada">Marcar Entrada</button>
+        </div>
+
+        <div class="panel-historial">
+            <h2>Mi Historial de Hoy</h2>
+            <hr>
+            <div class="historial-contenedor">
+                <ul id="lista-historial">
+                    <li class="registro">Esperando acción...</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/reloj.js"></script>
+    <script src="js/menu.js"></script>
+</body>
+</html>

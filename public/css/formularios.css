@@ -1,0 +1,66 @@
+.formulario-login {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.grupo-input {
+    text-align: left;
+    width: 100%;
+}
+
+.grupo-input label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #475569;
+}
+
+.input-base {
+    width: 100%;
+    padding: 12px 16px;
+    background-color: #f8fafc;
+    border: 1px solid var(--color-outline);
+    color: #1e293b;
+    border-radius: var(--radius-md);
+    box-sizing: border-box;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.input-base:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    background-color: #fff;
+}
+
+.input-peligro {
+    border-color: var(--color-error);
+}
+
+.reloj {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--color-primary);
+    margin: 1.5rem 0;
+    font-variant-numeric: tabular-nums;
+}
+
+.panel-botones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+#btn-marcar[data-accion="entrada"] {
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+}
+
+#btn-marcar[data-accion="salida"] {
+    background-color: var(--color-salida);
+    color: white;
+}

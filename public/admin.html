@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/formularios.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    
+    <a href="menu.html" class="btn-flotante">Volver al Menú</a>
+    <a href="login.html" class="btn-flotante btn-cerrar-sesion">Cerrar Sesión</a>
+
+    <main class="contenedor-principal contenedor-largo">
+        <div class="encabezado">
+            <h1>Panel de Administración</h1>
+            <hr>
+        </div>
+
+        <div class="admin-grid">
+            <div class="admin-seccion">
+                <h2>Gestión de Usuarios</h2>
+                <hr>
+                <button id="btn-crear-usuario" class="btn">Crear Usuario</button>
+                <button id="btn-modificar-usuario" class="btn">Modificar Usuario</button>
+                <button id="btn-eliminar-usuario" class="btn btn-peligro">Eliminar Usuario</button>
+            </div>
+
+            <div class="admin-seccion">
+                <h2>Reportes de Asistencia</h2>
+                <hr>
+                <button id="btn-rep-atrasos" class="btn">Reporte de Atrasos</button>
+                <button id="btn-rep-anticipadas" class="btn">Salidas Anticipadas</button>
+                <button id="btn-rep-inasistencias" class="btn">Reporte de Inasistencias</button>
+            </div>
+        </div>
+        
+        <div id="area-trabajo-admin" class="area-trabajo">
+            <p class="texto-centro texto-muteado">Seleccione una opción para ver los datos o formularios.</p>
+        </div>
+    </main>
+
+    <script src="js/validaciones.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
