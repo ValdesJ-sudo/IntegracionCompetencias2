@@ -14,8 +14,6 @@ router.post('/login', async (req, res) => {
     if (rows.length === 0) return res.status(401).send('Usuario no encontrado o inactivo.');
 
     const usuario = rows[0];
-
-    // FALTABA: Comparar la contraseña ingresada con el hash de la BD usando bcrypt
     const coincide = await bcrypt.compare(password, usuario.contrasena);
 
     if (!coincide) {
@@ -35,7 +33,6 @@ router.post('/login', async (req, res) => {
 router.post('/api/usuarios/crear', async (req, res) => {
   const { correo, password } = req.body;
   try {
-    // FALTABA: Hashear la contraseña antes de guardarla
     const passwordHasheada = await bcrypt.hash(password, 10);
 
     await pool.query(
@@ -59,7 +56,6 @@ router.put('/api/usuarios/modificar', async (req, res) => {
     let params = [];
 
     if (password && password.trim() !== '') {
-      // FALTABA: Hashear la nueva contraseña
       const passwordHasheada = await bcrypt.hash(password, 10);
 
       query = 'UPDATE usuarios SET contrasena = ? WHERE correo = ? AND estado_activo = TRUE';
@@ -102,30 +98,5 @@ router.get('/api/usuarios/me', (req, res) => {
   res.json({ rol: req.session.rol });
 });
 
-// RUTA TEMPORAL CORREGIDA (usando router, pool y columnas reales)
-router.get('/api/migrar-passwords', async (req, res) => {
-  try {
-    const [usuarios] = await pool.query('SELECT id_usuario, contrasena FROM usuarios');
-    let actualizados = 0;
-
-    for (let usuario of usuarios) {
-      // Validamos que exista la contraseña y no empiece con '$' (indicativo de bcrypt)
-      if (usuario.contrasena && !usuario.contrasena.startsWith('$')) {
-        const passwordHasheada = await bcrypt.hash(usuario.contrasena, 10);
-
-        await pool.query(
-          'UPDATE usuarios SET contrasena = ? WHERE id_usuario = ?',
-          [passwordHasheada, usuario.id_usuario]
-        );
-        actualizados++;
-      }
-    }
-
-    res.json({ mensaje: `Proceso terminado. Se actualizaron ${actualizados} usuarios.` });
-  } catch (error) {
-    console.error('Error migrando contraseñas:', error);
-    res.status(500).json({ error: 'Error al leer la base de datos' });
-  }
-});
 
 module.exports = router;
