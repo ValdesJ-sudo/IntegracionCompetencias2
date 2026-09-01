@@ -8,3 +8,4 @@ Boton responsivo que cambia segun marcaje de entrada y salida
     Tambien se genera el css con el cual responde en caso se ser entrada o salida
     
 
+Implementacion del pdf make para descargar los reportes pdf en el sistema
