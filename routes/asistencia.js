@@ -1,6 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db'); 
+const { enviarPdf } = require('../utils/pdf');
+const {
+  construirReporteAtrasos,
+  construirReporteAnticipadas,
+  construirReporteInasistencias
+} = require('../utils/reportesPdf');
 
 const verificarSesion = (req, res, next) => {
   if (!req.session.userId) {
@@ -73,7 +79,7 @@ router.get('/reporte/atrasos', verificarSesion, async (req, res) => {
     const [rows] = await pool.query(`
       SELECT u.correo, r.fecha, r.hora 
       FROM registro_asistencia r 
-      JOIN usuarios u ON r.id_usuario = u.id_usuario 
+      JOIN usuario u ON r.id_usuario = u.id_usuario 
       WHERE r.accion = 'entrada' AND r.hora > '09:30:00'
       ORDER BY r.fecha DESC, r.hora DESC
     `);
@@ -83,12 +89,29 @@ router.get('/reporte/atrasos', verificarSesion, async (req, res) => {
   }
 });
 
+router.get('/reporte/atrasos/pdf', verificarSesion, async (req, res) => {
+  try {
+    const [rows] = await pool.query(`
+      SELECT u.correo, r.fecha, r.hora 
+      FROM registro_asistencia r 
+      JOIN usuario u ON r.id_usuario = u.id_usuario 
+      WHERE r.accion = 'entrada' AND r.hora > '09:30:00'
+      ORDER BY r.fecha DESC, r.hora DESC
+    `);
+    const docDefinition = construirReporteAtrasos(rows);
+    await enviarPdf(res, docDefinition, `reporte-atrasos-${new Date().toISOString().slice(0, 10)}.pdf`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al generar el PDF.' });
+  }
+});
+
 router.get('/reporte/anticipadas', verificarSesion, async (req, res) => {
   try {
     const [rows] = await pool.query(`
       SELECT u.correo, r.fecha, r.hora 
       FROM registro_asistencia r 
-      JOIN usuarios u ON r.id_usuario = u.id_usuario 
+      JOIN usuario u ON r.id_usuario = u.id_usuario 
       WHERE r.accion = 'salida' AND r.hora < '17:30:00'
       ORDER BY r.fecha DESC, r.hora DESC
     `);
@@ -98,11 +121,28 @@ router.get('/reporte/anticipadas', verificarSesion, async (req, res) => {
   }
 });
 
+router.get('/reporte/anticipadas/pdf', verificarSesion, async (req, res) => {
+  try {
+    const [rows] = await pool.query(`
+      SELECT u.correo, r.fecha, r.hora 
+      FROM registro_asistencia r 
+      JOIN usuario u ON r.id_usuario = u.id_usuario 
+      WHERE r.accion = 'salida' AND r.hora < '17:30:00'
+      ORDER BY r.fecha DESC, r.hora DESC
+    `);
+    const docDefinition = construirReporteAnticipadas(rows);
+    await enviarPdf(res, docDefinition, `reporte-anticipadas-${new Date().toISOString().slice(0, 10)}.pdf`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al generar el PDF.' });
+  }
+});
+
 router.get('/reporte/inasistencias', verificarSesion, async (req, res) => {
   try {
     const [rows] = await pool.query(`
       SELECT correo 
-      FROM usuarios 
+      FROM usuario 
       WHERE rol = 'empleado' AND estado_activo = TRUE AND id_usuario NOT IN (
         SELECT id_usuario 
         FROM registro_asistencia 
@@ -112,6 +152,25 @@ router.get('/reporte/inasistencias', verificarSesion, async (req, res) => {
     res.json(rows);
   } catch (error) {
     res.status(500).json({ error: 'Error al generar reporte.' });
+  }
+});
+
+router.get('/reporte/inasistencias/pdf', verificarSesion, async (req, res) => {
+  try {
+    const [rows] = await pool.query(`
+      SELECT correo 
+      FROM usuario 
+      WHERE rol = 'empleado' AND estado_activo = TRUE AND id_usuario NOT IN (
+        SELECT id_usuario 
+        FROM registro_asistencia 
+        WHERE fecha = CURDATE()
+      )
+    `);
+    const docDefinition = construirReporteInasistencias(rows);
+    await enviarPdf(res, docDefinition, `reporte-inasistencias-${new Date().toISOString().slice(0, 10)}.pdf`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al generar el PDF.' });
   }
 });
 
