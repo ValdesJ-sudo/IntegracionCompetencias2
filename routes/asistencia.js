@@ -99,7 +99,7 @@ router.get('/reporte/atrasos/pdf', verificarSesion, async (req, res) => {
       ORDER BY r.fecha DESC, r.hora DESC
     `);
     const docDefinition = construirReporteAtrasos(rows);
-    enviarPdf(res, docDefinition, `reporte-atrasos-${new Date().toISOString().slice(0, 10)}.pdf`);
+    await enviarPdf(res, docDefinition, `reporte-atrasos-${new Date().toISOString().slice(0, 10)}.pdf`);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al generar el PDF.' });
@@ -131,7 +131,7 @@ router.get('/reporte/anticipadas/pdf', verificarSesion, async (req, res) => {
       ORDER BY r.fecha DESC, r.hora DESC
     `);
     const docDefinition = construirReporteAnticipadas(rows);
-    enviarPdf(res, docDefinition, `reporte-anticipadas-${new Date().toISOString().slice(0, 10)}.pdf`);
+    await enviarPdf(res, docDefinition, `reporte-anticipadas-${new Date().toISOString().slice(0, 10)}.pdf`);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al generar el PDF.' });
@@ -167,7 +167,7 @@ router.get('/reporte/inasistencias/pdf', verificarSesion, async (req, res) => {
       )
     `);
     const docDefinition = construirReporteInasistencias(rows);
-    enviarPdf(res, docDefinition, `reporte-inasistencias-${new Date().toISOString().slice(0, 10)}.pdf`);
+    await enviarPdf(res, docDefinition, `reporte-inasistencias-${new Date().toISOString().slice(0, 10)}.pdf`);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error al generar el PDF.' });

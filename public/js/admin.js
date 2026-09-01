@@ -1,9 +1,13 @@
 const areaTrabajo = document.getElementById('area-trabajo-admin');
 
 // Reportes
-async function cargarReporte(endpoint, titulo) {
+const cargarReporte = async (endpoint, titulo, endpointPdf) => {
     if (!areaTrabajo) return;
     areaTrabajo.innerHTML = `<p style="color: yellow;">Cargando ${titulo}...</p>`;
+
+    const botonPdf = endpointPdf
+        ? `<a href="${endpointPdf}" class="btn" target="_blank" rel="noopener">Descargar PDF</a>`
+        : '';
     
     try {
         const response = await fetch(endpoint);
@@ -11,12 +15,12 @@ async function cargarReporte(endpoint, titulo) {
         
         if (data.error) throw new Error(data.error);
         if (data.length === 0) {
-            areaTrabajo.innerHTML = `<h3>${titulo}</h3><hr><p>No hay registros que coincidan.</p>`;
+            areaTrabajo.innerHTML = `<div class="encabezado-reporte"><h3>${titulo}</h3>${botonPdf}</div><hr><p>No hay registros que coincidan.</p>`;
             return;
         }
 
         const mostrarFechas = data[0].hora !== undefined;
-        let html = `<h3>${titulo}</h3><table class="tabla-reporte"><tr><th>Correo</th>`;
+        let html = `<div class="encabezado-reporte"><h3>${titulo}</h3>${botonPdf}</div><hr><table class="tabla-reporte"><tr><th>Correo</th>`;
         if (mostrarFechas) html += `<th>Fecha</th><th>Hora</th>`;
         html += `</tr>`;
                     
@@ -32,11 +36,11 @@ async function cargarReporte(endpoint, titulo) {
     } catch (error) { 
         areaTrabajo.innerHTML = `<p class="texto-peligro">${error.message || 'Error de conexión.'}</p>`; 
     }
-}
+};
 
-document.getElementById('btn-rep-atrasos')?.addEventListener('click', () => cargarReporte('/api/asistencia/reporte/atrasos', 'Entradas Atrasadas'));
-document.getElementById('btn-rep-anticipadas')?.addEventListener('click', () => cargarReporte('/api/asistencia/reporte/anticipadas', 'Salidas Anticipadas'));
-document.getElementById('btn-rep-inasistencias')?.addEventListener('click', () => cargarReporte('/api/asistencia/reporte/inasistencias', 'Empleados Ausentes Hoy'));
+document.getElementById('btn-rep-atrasos')?.addEventListener('click', () => cargarReporte('/api/asistencia/reporte/atrasos', 'Entradas Atrasadas', '/api/asistencia/reporte/atrasos/pdf'));
+document.getElementById('btn-rep-anticipadas')?.addEventListener('click', () => cargarReporte('/api/asistencia/reporte/anticipadas', 'Salidas Anticipadas', '/api/asistencia/reporte/anticipadas/pdf'));
+document.getElementById('btn-rep-inasistencias')?.addEventListener('click', () => cargarReporte('/api/asistencia/reporte/inasistencias', 'Empleados Ausentes Hoy', '/api/asistencia/reporte/inasistencias/pdf'));
 
 // Gestion de usuarios
 function mostrarMensaje(elementoId, mensaje, esExito) {
