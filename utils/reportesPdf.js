@@ -1,14 +1,14 @@
-function formatearFecha(fecha) {
+const formatearFecha = (fecha) => {
   return new Date(fecha).toLocaleDateString('es-CL');
-}
+};
 
-function encabezado(titulo) {
+const encabezado = (titulo) => {
   return [
     { text: titulo, style: 'titulo' },
     { text: `Generado el ${new Date().toLocaleDateString('es-CL')}`, style: 'subtitulo' },
     { text: ' ', margin: [0, 8] }
   ];
-}
+};
 
 const estilosBase = {
   styles: {
@@ -21,8 +21,7 @@ const estilosBase = {
   pageMargins: [40, 50, 40, 50]
 };
 
-// datos: filas con { correo, fecha, hora }
-function construirReporteAtrasos(datos) {
+const construirReporteAtrasos = (datos) => {
   return {
     ...estilosBase,
     content: [
@@ -46,10 +45,9 @@ function construirReporteAtrasos(datos) {
           }
     ]
   };
-}
+};
 
-// datos: filas con { correo, fecha, hora }
-function construirReporteAnticipadas(datos) {
+const construirReporteAnticipadas = (datos) => {
   return {
     ...estilosBase,
     content: [
@@ -73,10 +71,9 @@ function construirReporteAnticipadas(datos) {
           }
     ]
   };
-}
+};
 
-// datos: filas con { correo }
-function construirReporteInasistencias(datos) {
+const construirReporteInasistencias = (datos) => {
   return {
     ...estilosBase,
     content: [
@@ -96,7 +93,7 @@ function construirReporteInasistencias(datos) {
           }
     ]
   };
-}
+};
 
 module.exports = {
   construirReporteAtrasos,
