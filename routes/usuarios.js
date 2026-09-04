@@ -7,7 +7,7 @@ router.post('/login', async (req, res) => {
   const { correo, password } = req.body;
   try {
     const [rows] = await pool.query(
-      'SELECT * FROM usuarios WHERE correo = ? AND estado_activo = TRUE',
+      'SELECT * FROM usuario WHERE correo = ? AND estado_activo = TRUE',
       [correo]
     );
 
@@ -36,7 +36,7 @@ router.post('/api/usuarios/crear', async (req, res) => {
     const passwordHasheada = await bcrypt.hash(password, 10);
 
     await pool.query(
-      'INSERT INTO usuarios (correo, contrasena, estado_activo) VALUES (?, ?, TRUE)',
+      'INSERT INTO usuario (correo, contrasena, estado_activo) VALUES (?, ?, TRUE)',
       [correo, passwordHasheada]
     );
     res.json({ mensaje: 'Usuario creado exitosamente.' });
@@ -58,7 +58,7 @@ router.put('/api/usuarios/modificar', async (req, res) => {
     if (password && password.trim() !== '') {
       const passwordHasheada = await bcrypt.hash(password, 10);
 
-      query = 'UPDATE usuarios SET contrasena = ? WHERE correo = ? AND estado_activo = TRUE';
+      query = 'UPDATE usuario SET contrasena = ? WHERE correo = ? AND estado_activo = TRUE';
       params = [passwordHasheada, correo];
     } else {
       return res.status(400).json({ error: 'No se enviaron datos para actualizar.' });
@@ -79,7 +79,7 @@ router.delete('/api/usuarios/eliminar', async (req, res) => {
   const { correo } = req.body;
   try {
     const [result] = await pool.query(
-      'UPDATE usuarios SET estado_activo = FALSE WHERE correo = ?',
+      'UPDATE usuario SET estado_activo = FALSE WHERE correo = ?',
       [correo]
     );
     if (result.affectedRows === 0) {

@@ -8,7 +8,7 @@ Boton responsivo que cambia segun marcaje de entrada y salida
     Tambien se genera el css con el cual responde en caso se ser entrada o salida
     
 
-Posibles mejoras: Descargar PDF de los reportes
+Posibles mejoras:
                   Validacion de contrasenias
                   Aplicar un eliminar real y no un estado inactivo
                   api marcar valide entrada y salida
